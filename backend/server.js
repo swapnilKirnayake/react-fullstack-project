@@ -24,6 +24,19 @@ app.get("/users", (req, res) => {
 
 });
 
+app.get("/users/:id", (req, res) => {
+const users = [
+{id: 1, name: "Swapnil"},
+{id: 2, name: "Alex"},
+{id: 3, name: "Biscoff"}
+];
+
+const userId = parseInt(req.params.id);
+const user = users.find(u => u.id === userId);
+
+res.json(user);
+});
+
 app.listen(5000, () => {
 
     console.log("Server running on port 5000");
