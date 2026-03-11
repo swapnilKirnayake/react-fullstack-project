@@ -37,6 +37,17 @@ const user = users.find(u => u.id === userId);
 res.json(user);
 });
 
+app.post("/users", (req, res) => {
+
+    const newUser = req.body;
+
+    res.json({
+        message: "User created successfully",
+        user: newUser
+    });
+
+});
+
 app.listen(5000, () => {
 
     console.log("Server running on port 5000");
