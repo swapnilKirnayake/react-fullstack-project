@@ -48,6 +48,24 @@ app.post("/users", (req, res) => {
 
 });
 
+app.delete("/users/:id", (req, res) =>{
+
+    const users = [
+        { id: 1, name: "Swapnil" },
+        { id: 2, name: "Alex" },
+        { id: 3, name: "Biscoff" }
+    ];
+
+    const userId = parseInt(req.params.id);
+
+    const filteredUsers = users.filter(u => u.id !== userId);
+    res.json({
+        message: "User deleted successfully",
+        remainingUsers: filteredUsers
+    });
+
+});
+
 app.listen(5000, () => {
 
     console.log("Server running on port 5000");
