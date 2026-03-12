@@ -6,12 +6,6 @@ app.use(cors());
 
 app.use(express.json());
 
-let users = [
-    { id: 1, name: "Swapnil" },
-    { id: 2, name: "Alex" },
-    { id: 3, name: "Biscoff" }
-];
-
 app.get("/", (req, res) => {
 
     res.send("Backend API running ...")
