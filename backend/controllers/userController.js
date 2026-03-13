@@ -33,9 +33,26 @@ const updateUser = (req, res) => {
     res.json(user);
 };
 
+const deleteUser = (req, res) => {
+    const userId = parseInt(req.params.id);
+    const index = users.findIndex(u => u.id === userId);
+
+    if(index === -1) {
+        return res.status(404).json({message: "User not found" });
+    }
+
+    const deletedUser = users.splice(index, 1);
+    res.json({message: "User deleted successfully", 
+        user: deletedUser[0]
+    });
+
+
+};
+
 module.exports = {
     getUsers,
     getUserById,
     createUser,
-    updateUser
+    updateUser,
+    deleteUser
 };
