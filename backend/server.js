@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
+const userRoutes = require("./routes/userRoutes");
+
 const app = express();
 app.use(cors());
 
@@ -12,49 +14,7 @@ app.get("/", (req, res) => {
 
 });
 
-app.get("/users", (req, res) => {
-
-    res.json(users);
-
-});
-
-app.get("/users/:id", (req, res) => {
-
-const userId = parseInt(req.params.id);
-const user = users.find(u => u.id === userId);
-
-res.json(user);
-
-});
-
-app.post("/users", (req, res) => {
-
-    const newUser = {
-        id: users.length + 1,
-        name: req.body.name
-    }
-    users.push(newUser);
-    res.json(newUser);
-
-});
-
-app.delete("/users/:id", (req, res) =>{
-
-    const users = [
-        { id: 1, name: "Swapnil" },
-        { id: 2, name: "Alex" },
-        { id: 3, name: "Biscoff" }
-    ];
-
-    const userId = parseInt(req.params.id);
-
-    const filteredUsers = users.filter(u => u.id !== userId);
-    res.json({
-        message: "User deleted successfully",
-        remainingUsers: filteredUsers
-    });
-
-});
+app.use("/", userRoutes);
 
 app.listen(5000, () => {
 
