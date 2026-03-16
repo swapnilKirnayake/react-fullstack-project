@@ -1,52 +1,89 @@
-const users = require("../data/users");
+const User = require("../models/userModel.js");
 
-const getUsers = (req, res) =>{
+const getUsers = async (req, res) =>{
+  try { 
+    const users = await User.find();
     res.json(users);
+
+   }catch(error) {
+    res.status(500).json({message: error.message});
+   }
 };
 
-const getUserById = (req, res) =>{
-    const userId = parseInt(req.params.id);
-    const user = users.find(u => u.id === userId);
-    res.json(user);
-};
+ const getUserById = async (req, res) => {
+   try{
+     const user = await User.findById(req.params.id);
 
-const createUser = (req, res) => {
-    const newUser = {
-        id: users.length + 1,
-        name: req.body.name
-    };
+     if(user) {
+        res.json(user);
+     } else{
+        res.status(404).json({ message: "User not found" });
+     }
 
-    users.push(newUser);
-
-    res.json(newUser);
-};
-
-const updateUser = (req, res) => {
-    const userId = parseInt(req.params.id);
-    const user = users.find(u => u.id === userId);
-
-    if(!user) {
-        return res.status(404).json({message: "User not found"});
-    };
-
-    user.name = req.body.name;
-    res.json(user);
-};
-
-const deleteUser = (req, res) => {
-    const userId = parseInt(req.params.id);
-    const index = users.findIndex(u => u.id === userId);
-
-    if(index === -1) {
-        return res.status(404).json({message: "User not found" });
+    } catch(error){
+        res.status(500).json({ message: error.message });
     }
+};
 
-    const deletedUser = users.splice(index, 1);
-    res.json({message: "User deleted successfully", 
-        user: deletedUser[0]
-    });
+const createUser = async (req, res) => {
+    try{
+       const { name, email, age } = req.body;
 
+       const user = new User({
+        name,
+        email,
+        age,
+       });
 
+       const createdUser = await user.save();
+
+       res.status(201).json(createdUser);
+
+    } catch(error){
+        res.status(400).json({ message: error.message });
+    }
+};
+
+ const updateUser = async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+
+        if(user){
+            user.name = req.body.name || user.name;
+            user.email = req.body.email || user.email;
+            user.age = req.body.age || user.age;
+
+            const updatedUser = await user.save();
+
+            res.json(updatedUser);
+
+        } else{
+            res.status(404).json({ message: "User not found" });
+
+        }
+
+    } catch(error){
+        res.status(404).json({ message: error.message});
+
+    }
+};
+
+ const deleteUser = async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        if(user){
+            await user.deleteOne();
+            res.json({ message: "User removed" });
+
+        } else{
+            res.status(404).json({ message: "User not found" });
+
+        }
+
+    } catch(error){
+        res.status(500).json({ message: error.message});
+
+    }
 };
 
 module.exports = {
@@ -55,4 +92,5 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser
+
 };
