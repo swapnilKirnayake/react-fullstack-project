@@ -27,12 +27,10 @@ const getUsers = async (req, res) =>{
 
 const createUser = async (req, res) => {
     try{
-       const { name, email, age } = req.body;
+       const { name} = req.body;
 
        const user = new User({
         name,
-        email,
-        age,
        });
 
        const createdUser = await user.save();
@@ -50,8 +48,6 @@ const createUser = async (req, res) => {
 
         if(user){
             user.name = req.body.name || user.name;
-            user.email = req.body.email || user.email;
-            user.age = req.body.age || user.age;
 
             const updatedUser = await user.save();
 
